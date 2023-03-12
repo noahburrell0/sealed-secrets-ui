@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sealed Secrets UI</title>        
+
+        <script src="static/js/uikit.min.js"></script>
+        <script src="static/js/uikit-icons.min.js"></script>
+        
+        <link rel="stylesheet" href="static/css/uikit.min.css" />
+        <link rel="stylesheet" href="static/css/extra.css" />
+        <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+    </head>
+    <body>
+        <!-- Loading Screen -->
+        <div id="loading" class="uk-hidden uk-flex uk-flex-column uk-flex-center uk-flex-middle">
+            <div class="uk-margin-small-bottom"><span class="uk-margin-small-right" uk-spinner="ratio: 3"></span></div>
+            <div>Encrypting Your Secret...</div>
+        </div>
+
+        <!-- Content -->
+        <div class="uk-section uk-padding-small">
+            <div class="uk-flex uk-flex-center uk-flex-middle uk-height-small">
+                <div class="uk-height-1-1"><img class="uk-height-1-1" src="static/images/bitnami.png"></div>
+                <div class="uk-heading-medium uk-margin-medium-left">Sealed Secrets UI</div>
+            </div>
+
+            <div class="uk-container">
+                <div class="uk-panel uk-margin-bottom-medium">
+                    
+                    <form onsubmit="return encrypt()">
+                        <div class="uk-text-lead uk-text-center">Encryption Settings</div>
+                        <div class="uk-flex uk-flex-center uk-flex-middle">
+
+                            <div class="uk-flex uk-flex-center uk-flex-middle uk-padding-small">
+                                <div>Context:</div>
+                                <div>
+                                    <select class="uk-select" aria-label="Select" id="context">
+                                        {% for context in contexts %}
+                                        <option value="{{context}}">{{context}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="uk-flex uk-flex-center uk-flex-middle uk-padding-small">
+                                <div>Scope: </div>
+                                <div>
+                                    <select class="uk-select" aria-label="Select" id="scope" onchange="checkScope()" {% if scope_tooltip %}uk-tooltip="{{scope_tooltip}}"{% endif %}>
+                                        <option value="strict"{% if default_scope == "strict" %} selected{% endif %}>strict</option>
+                                        <option value="namespace-wide"{% if default_scope == "namespace-wide" %} selected{% endif %}>namespace-wide</option>
+                                        <option value="cluster-wide"{% if default_scope == "cluster-wide" %} selected{% endif %}>cluster-wide</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="uk-flex uk-flex-center uk-flex-middle uk-padding-small">
+                                <div>Mode:</div>
+                                <div>
+                                    <select class="uk-select" aria-label="Select" id="mode" onchange="checkMode();">
+                                        <option value="raw">Raw</option>
+                                        <option value="file">From File</option>
+                                        <option value="secret" disabled>From Secret</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="uk-flex uk-flex-center uk-flex-middle">
+
+                            <div id="namespace" class="uk-flex uk-flex-center uk-flex-middle uk-padding-small" hidden>
+                                <div>Namespace:</div>
+                                <div>
+                                    <input id="ns" class="uk-input" type="text" placeholder="Input" aria-label="Input">
+                                </div>
+                            </div>
+
+                            <div id="sealed-secret-name" class="uk-flex uk-flex-center uk-flex-middle uk-padding-small" hidden>
+                                <div>Sealed Secret Name:</div>
+                                <div>
+                                    <input id="ss-name" class="uk-input" type="text" placeholder="Input" aria-label="Input">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="uk-text-lead uk-text-center">Unencrypted Input</div>
+                        
+                        <div id="unencryptedTextarea">
+                            <textarea class="uk-textarea uk-resize-vertical" rows="12" id="unencrypted"></textarea>
+                        </div>
+
+                        <div id="fileUpload" class="uk-margin-remove uk-width-1-1 uk-padding-small uk-placeholder" uk-form-custom="target: true">          
+                            <input id="unencryptedFile" type="file" aria-label="Custom controls">
+                            <input class="uk-input uk-align-center uk-width-expand uk-form-blank uk-form-large uk-margin-remove-top" type="text" placeholder="Click here to select a file" aria-label="Custom controls">    
+                        </div>
+
+                        <button class="uk-button uk-button-primary uk-margin-medium uk-align-center" type="submit">Seal Secret</button>
+                    </form>
+                </div>
+
+                <hr class="uk-margin-remove"/>
+
+                <div class="uk-panel uk-margin-medium-top">
+                    <div class="uk-text-lead uk-text-center">Encrypted Output</div>
+                    <div>
+                        <div>
+                            <textarea  class="uk-textarea uk-resize-vertical" rows="12" id="encrypted" readonly disabled></textarea>
+                        </div>
+                        <div class="uk-position-top-right uk-position-medium uk-margin-remove-right uk-overlay">
+                            <a class="uk-link-heading" onclick="copyToClipboard();"><span uk-icon="copy"></span></a>
+                        </div>                        
+                    </div>  
+                </div>
+                         
+            </div>
+            
+
+        </div>
+        <script src="static/js/extra.js"></script>
+    </body>
+</html>
