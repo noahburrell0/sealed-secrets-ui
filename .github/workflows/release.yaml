@@ -1,0 +1,33 @@
+
+name: Create Release
+on:
+  release:
+    types: [released]
+    
+
+jobs:
+  build-publish-image:
+    name: Build and Publish Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Variables
+        id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+      - name: Login to registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker Build and Push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/noahburrell0/sealed-secrets-ui:latest,ghcr.io/noahburrell0/sealed-secrets-ui:${{ steps.vars.outputs.tag }}
