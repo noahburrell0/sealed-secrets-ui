@@ -15,7 +15,7 @@ This application currently supports:
 - Direct API calls to seal secrets
 
 This application currently **does not** support:
-- Converting Kubernetes Secret manifests to SealedSecret manifests
+- Converting Kubernetes Secret manifests to SealedSecret manifests (yet)
 - Any sort of authentication to the API or web UI
 - Setting the namespace that the Sealed Secrets operator is installed to (must be `kube-system`)
 
