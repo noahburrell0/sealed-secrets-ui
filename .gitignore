@@ -3,3 +3,5 @@ venv
 source
 environment
 kubeconfs
+ingress.yaml
+secrets.yaml
