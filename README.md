@@ -34,7 +34,7 @@ This application is designed to run in Kubernetes! A set of base Kubernetes mani
 
 Docker images are available in GHCR [here](https://github.com/noahburrell0/sealed-secrets-ui/pkgs/container/sealed-secrets-ui).
 
-Just mount in your Kubeconfig and update the `configmap.yaml` with your settings, and thats it!
+Just mount in your Kubeconfig and update the `configmap.yaml` with your settings. Optionally, you may wish to set up an ingress for ease of access (not included in manifests).
 
 ### Kubeconfig/s
 Kubeconfig files can be mounted into the container using either a PersistenVolume or by mounting a secret. The directory that the files are mount into should be specified by the `KUBECONF_DIR` environment variable.
@@ -47,6 +47,15 @@ Kubeconfig files can be mounted into the container using either a PersistenVolum
 |DEFAULT_SCOPE|String||None|Defines the scope selected by default in the web UI. Valid options: `strict`, `namespace-wide`, or `cluster-wide`.
 |SCOPE_TOOLTIP|String||None|Enables an in-browser tooltip when hovering the scope selection.
 |DEBUG|Boolean||`False`|May output sensitive information in logs if enabled.
+
+### Accessing the API and Web UI
+By default, the application listens on `0.0.0.0:5000` and the kubernetes service is configured on the same port. To access the API and web UI (assuming no ingress is configured and the service has not been reconfigured as a loadbalancer), use `kubectl` to create a proxy to the application.
+
+```
+kubectl port-forward service/sealed-secrets-ui-svc 5000:5000 -n sealed-secrets-ui
+```
+
+Assuming the `BASE_PATH` env has not been modified, the web UI should now by accessible at `http://localhost:5000/`
 
 ## Running Locally
 
