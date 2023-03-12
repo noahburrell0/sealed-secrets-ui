@@ -48,7 +48,7 @@ Kubeconfig files can be mounted into the container using either a PersistenVolum
 |SCOPE_TOOLTIP|String||None|Enables an in-browser tooltip when hovering the scope selection.
 |DEBUG|Boolean||`False`|May output sensitive information in logs if enabled.
 
-### Accessing the API and Web UI
+### Accessing the Web UI
 By default, the application listens on `0.0.0.0:5000` and the kubernetes service is configured on the same port. To access the API and web UI (assuming no ingress is configured and the service has not been reconfigured as a loadbalancer), use `kubectl` to create a proxy to the application.
 
 ```
