@@ -1,6 +1,8 @@
 # Sealed Secrets UI
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
+![image](https://i.imgur.com/0O9ebVu.png)
+
 ## Introduction
 
 This application is designed to provide a web-based GUI for encrypting Kubernetes secrets for use with Bitnami Sealed Secrets using the Kubeseal utility.
@@ -18,14 +20,6 @@ This application currently **does not** support:
 - Converting Kubernetes Secret manifests to SealedSecret manifests (yet)
 - Any sort of authentication to the API or web UI
 - Setting the namespace that the Sealed Secrets operator is installed to (must be `kube-system`)
-
-## Interface
-
-### Raw Values
-![image](https://i.imgur.com/0O9ebVu.png)
-
-### Whole Files
-![image](https://i.imgur.com/OOMElW4.png)
 
 ## Setup
 
