@@ -1,5 +1,5 @@
 # Sealed Secrets UI
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Introduction
 
@@ -91,7 +91,7 @@ The base URL of the API is available at `<base_path>/api`. There are currently 2
 
 ---
 
-### `/<base_path>/api/seal/raw` **POST**
+### ![](https://img.shields.io/static/v1?label=Method&message=POST&color=blue) `/<base_path>/api/seal/raw`
 
 **Description:** Seals a text value, 1 per request.
 
@@ -130,7 +130,7 @@ The base URL of the API is available at `<base_path>/api`. There are currently 2
 
 ---
 
-### `/<base_path>/api/seal/file` **POST**
+### ![](https://img.shields.io/static/v1?label=Method&message=POST&color=blue) `/<base_path>/api/seal/file`
 
 **Description:** Seals a whole file, 1 per request.
 
