@@ -91,13 +91,11 @@ The base URL of the API is available at `<base_path>/api`. There are currently 2
 
 ---
 
-### ![](https://img.shields.io/static/v1?label=Method&message=POST&color=blue) `/<base_path>/api/seal/raw`
+### `/<base_path>/api/seal/raw`
+
+![](https://img.shields.io/static/v1?label=Method&message=POST&color=blue) ![](https://img.shields.io/static/v1?label=Content-Type&message=application/json&color=darkgreen) ![](https://img.shields.io/static/v1?label=Returns&message=application/json&color=darkgreen)
 
 **Description:** Seals a text value, 1 per request.
-
-**Content-Type:** application/json
-
-**Returns:** application/json
 
 **Schema:**
 ```
@@ -130,13 +128,11 @@ The base URL of the API is available at `<base_path>/api`. There are currently 2
 
 ---
 
-### ![](https://img.shields.io/static/v1?label=Method&message=POST&color=blue) `/<base_path>/api/seal/file`
+### `/<base_path>/api/seal/file`
+
+![](https://img.shields.io/static/v1?label=Method&message=POST&color=blue) ![](https://img.shields.io/static/v1?label=Content-Type&message=multipart/form-data&color=darkred) ![](https://img.shields.io/static/v1?label=Returns&message=application/json&color=darkgreen)
 
 **Description:** Seals a whole file, 1 per request.
-
-**Content-Type:** form/multipart
-
-**Returns:** application/json
 
 **Schema:**
 ```
