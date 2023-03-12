@@ -37,9 +37,11 @@ Docker images are available in GHCR [here](https://github.com/noahburrell0/seale
 Just mount in your Kubeconfig and update the `configmap.yaml` with your settings. Optionally, you may wish to set up an ingress for ease of access (not included in manifests).
 
 ### Kubeconfig/s
-Kubeconfig files can be mounted into the container using either a PersistenVolume or by mounting a secret. The directory that the files are mount into should be specified by the `KUBECONF_DIR` environment variable.
+Kubeconfig files can be mounted into the container using either a PersistenVolume or by mounting a secret. The directory that the files are mount into should be specified by the `KUBECONF_DIR` environment variable. Please consult with the Kubernetes documentation if you are unsure how to do this.
 
 ### Environment Variables
+Set your environment variable in the [configmap](manifests/configmap.yaml).
+
 |Variable|Type|Required|Default|Notes|
 |-|-|:-:|-|-|
 |KUBECONF_DIR|String|✔|None|Absolute path to directory containing kubeconfig file/s, do not include a trailing `/` .
