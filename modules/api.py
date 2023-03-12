@@ -6,7 +6,7 @@ from werkzeug.exceptions import *
 
 class API:
     def __init__(self, ks: Kubeseal):
-        self.logger = logging.getLogger(__name__) 
+        self.logger = logging.getLogger(__name__)
 
         # Make Kubeseal available
         self.ks = ks
@@ -19,18 +19,18 @@ class API:
         if 'context' not in settings:
             self.logger.warning("Bad request: missing `context` key")
             return False, json.dumps({"error":"missing `context` key"}), 400, {'Content-Type':'application/json'}
-        
+
         # Check for scope in request
         if 'scope' not in settings:
             self.logger.warning("Bad request: missing `scope` key")
             return False, json.dumps({"error":"missing `scope` key"}), 400, {'Content-Type':'application/json'}
-        
+
         # check the scope is valid
         validScopes = ['strict', 'namespace-wide', 'cluster-wide']
         if settings['scope'] not in validScopes:
             self.logger.warning("Bad request: invalid scope")
             return False, json.dumps({"error":"invalid scope"}), 400, {'Content-Type':'application/json'}
-        
+
         # Check for namespace depending of scope
         namespacedScopes = ['strict', 'namespace-wide']
         if settings['scope'] in namespacedScopes:
@@ -42,19 +42,19 @@ class API:
         if settings['scope'] == "strict" and 'secretName' not in settings:
             self.logger.warning("Bad request: missing `secretName` key but request was scoped 'strict'")
             return False, json.dumps({"error":"missing `secretName` key, required for 'strict' scope"}), 400, {'Content-Type':'application/json'}
-        
+
         return True, None, None, None
-    
+
 
     def __kubesealCheckError(self, sealedSecret):
         # Check for kubeseal error
         if isinstance(sealedSecret, SystemError):
             return False, json.dumps({"error":str(sealedSecret)}), 500, {'Content-Type':'application/json'}
-        
+
         # Check for other errors
         if isinstance(sealedSecret, LookupError):
             return False, json.dumps({"error":str(sealedSecret)}), 400, {'Content-Type':'application/json'}
-        
+
         return True, None, None, None
 
 
@@ -66,7 +66,7 @@ class API:
         status, message, returncode, headers = self.__validate_settings(json.dumps(postBody))
         if not status:
             return message, returncode, headers
-        
+
         # Validate a value was posted
         if 'value' not in postBody:
             self.logger.warning("Bad request: missing `value` key")
@@ -98,7 +98,7 @@ class API:
         except KeyError:
             self.logger.warning("Bad request: missing `json` form in formdata")
             return json.dumps({"error":"could not get `json` form in formdata"}), 400, {'Content-Type':'application/json'}
-        
+
         # Validate settings
         status, message, returncode, headers = self.__validate_settings(json.dumps(postBody))
         if not status:

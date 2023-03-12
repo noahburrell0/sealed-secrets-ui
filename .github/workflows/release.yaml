@@ -1,9 +1,8 @@
-
 name: Create Release
 on:
   release:
     types: [released]
-    
+
 
 jobs:
   build-publish-image:

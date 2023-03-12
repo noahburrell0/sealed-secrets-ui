@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 
 class Kubeseal:
     def __init__(self, **kwargs):
-        self.logger = logging.getLogger(__name__) 
+        self.logger = logging.getLogger(__name__)
 
         # Get config parameters
         self.kubeconfDir = kwargs.get("config_dir", "/kubeconfigs")
@@ -39,7 +39,7 @@ class Kubeseal:
             for context in kubeconfRaw['contexts']:
                 self.contexts[context['name']] = kubeconf
                 self.logger.info("Found cluster context \""+str(context['name'])+"\" in \""+str(kubeconf)+"\"")
-        
+
         # If there are no contexts in any of the files, fail
         if len(self.contexts) < 1:
             self.logger.fatal("Could not find any Kubernetes contexts")
@@ -51,8 +51,8 @@ class Kubeseal:
 
     def getContexts(self):
         return self.contexts
-    
-    
+
+
     def sealRawValue(self, value: str, context: str, scope: str, **kwargs):
         # Get kwargs
         namespace = kwargs.get('namespace', None)
@@ -75,7 +75,7 @@ class Kubeseal:
             if secretName is None or secretName == "":
                 return LookupError("'secretName' key is not defined or is empty")
             cmd = cmd+" --name "+secretName
-        
+
         # Try to run Kubeseal
         try:
             kubeseal = subprocess.run(cmd, shell=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -92,7 +92,7 @@ class Kubeseal:
         # Return encrypted value
         self.logger.debug("Encrypted new value against context \""+context+"\": "+str(kubesealOut))
         return str(kubesealOut)
-    
+
     def sealRawFile(self, file: FileStorage, context: str, scope: str, **kwargs):
         # Get kwargs
         namespace = kwargs.get('namespace', None)
@@ -117,7 +117,7 @@ class Kubeseal:
             if secretName is None or secretName == "":
                 return LookupError("'secretName' key is not defined or is empty")
             cmd = cmd+" --name "+secretName
-        
+
         # Try to run Kubeseal
         try:
             kubeseal = subprocess.run(cmd, shell=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -137,4 +137,3 @@ class Kubeseal:
         # Return encrypted value
         self.logger.debug("Encrypted new file against context \""+context+"\": "+str(kubesealOut))
         return str(kubesealOut)
-        

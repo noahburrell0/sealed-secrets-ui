@@ -1,4 +1,4 @@
-import logging 
+import logging
 import os
 
 from flask import Flask, Blueprint, request, send_from_directory
@@ -19,7 +19,7 @@ class application:
         # Set logging
         logLevel = logging.INFO if not self.DEBUG else logging.DEBUG
         logging.basicConfig(level=logLevel, format='[%(levelname)s] %(name)s:%(module)s %(asctime)s -- %(message)s')
-        self.logger = logging.getLogger(__name__) 
+        self.logger = logging.getLogger(__name__)
 
         # Initialize kubeseal object
         self.ks = Kubeseal(config_dir=KUBECONF_DIR)
@@ -33,7 +33,7 @@ class application:
         )
 
         # Setup Flask
-        self.app = Flask(__name__)    
+        self.app = Flask(__name__)
         self.api = Blueprint("api", __name__, url_prefix=BASE_PATH+"/api")
         self.ui = Blueprint("ui", __name__, url_prefix=BASE_PATH)
 
@@ -59,11 +59,11 @@ class application:
         @self.api.route("/seal/file", methods=['POST'])
         def apiSealFile():
             return self.apiObj.sealFile(request)
-        
+
         # Register Flask Blueprints
         self.app.register_blueprint(self.api)
         self.app.register_blueprint(self.ui)
-    
+
     # Run Flask
     def run(self):
         self.app.run(debug=self.DEBUG, host="0.0.0.0")

@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  KUBECONF_DIR: "/kubeconfs"
+  # BASE_PATH: ""
+  # DEFAULT_SCOPE: "" # Valid options: "strict", "namespace-wide", "cluster-wide"
+  # SCOPE_TOOLTIP: ""
+  # DEBUG: ""
+kind: ConfigMap
+metadata:
+  name: sealed-secrets-ui-cm
+  namespace: sealed-secrets-ui

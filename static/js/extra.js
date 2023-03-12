@@ -67,16 +67,16 @@ function checkMode(){
 function copyToClipboard() {
     // Get the text field
     var copyText = document.getElementById("encrypted");
-  
+
     // Select the text field
     copyText.select();
-  
+
      // Copy the text inside the text field
     navigator.clipboard.writeText(copyText.value);
-  
+
     // Alert the copied text
     UIkit.notification({message: "<div align=\"center\">Copied To Clipboard!</div>", status: 'primary', timeout: 1000});
-  } 
+  }
 
 function encrypt(){
     // Get loading element
@@ -112,26 +112,26 @@ function encrypt(){
         // Remove loading screen
         loading.classList.add("uk-hidden");
 
-        var returnCode = this.status; // Get return code 
+        var returnCode = this.status; // Get return code
         console.log(returnCode);
 
         // Write encrypted value or return errors as a notification
         if (returnCode == 200){
             var response = JSON.parse(this.response);
             document.getElementById("encrypted").value = response.data;
-            document.getElementById("unencrypted").value = ""; 
+            document.getElementById("unencrypted").value = "";
         } else if (returnCode == 500) {
             var response = JSON.parse(this.response);
             UIkit.notification({message: response.error, status: 'danger', timeout: 10000});
         } else {
             UIkit.notification({message: '<b><span uk-icon="icon: warning"></span> An unknown error occurred.</b>', status: 'danger', timeout: 10000});
-        }  
+        }
     };
 
     // Determine if the request should be form-multipart or JSON, and send request - Depends on mode element and API endpoint
     if ( document.getElementById("mode").value == "file") {
         var formData = new FormData();
-        
+
         // Load form into formdata object as json
         formData.append("json", JSON.stringify(data));
 

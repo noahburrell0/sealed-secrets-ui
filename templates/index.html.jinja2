@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Sealed Secrets UI</title>        
+        <title>Sealed Secrets UI</title>
 
         <script src="static/js/uikit.min.js"></script>
         <script src="static/js/uikit-icons.min.js"></script>
-        
+
         <link rel="stylesheet" href="static/css/uikit.min.css" />
         <link rel="stylesheet" href="static/css/extra.css" />
         <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
@@ -26,7 +26,7 @@
 
             <div class="uk-container">
                 <div class="uk-panel uk-margin-bottom-medium">
-                    
+
                     <form onsubmit="return encrypt()">
                         <div class="uk-text-lead uk-text-center">Encryption Settings</div>
                         <div class="uk-flex uk-flex-center uk-flex-middle">
@@ -63,7 +63,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         <div class="uk-flex uk-flex-center uk-flex-middle">
@@ -85,14 +85,14 @@
                         </div>
 
                         <div class="uk-text-lead uk-text-center">Unencrypted Input</div>
-                        
+
                         <div id="unencryptedTextarea">
                             <textarea class="uk-textarea uk-resize-vertical" rows="12" id="unencrypted"></textarea>
                         </div>
 
-                        <div id="fileUpload" class="uk-margin-remove uk-width-1-1 uk-padding-small uk-placeholder" uk-form-custom="target: true">          
+                        <div id="fileUpload" class="uk-margin-remove uk-width-1-1 uk-padding-small uk-placeholder" uk-form-custom="target: true">
                             <input id="unencryptedFile" type="file" aria-label="Custom controls">
-                            <input class="uk-input uk-align-center uk-width-expand uk-form-blank uk-form-large uk-margin-remove-top" type="text" placeholder="Click here to select a file" aria-label="Custom controls">    
+                            <input class="uk-input uk-align-center uk-width-expand uk-form-blank uk-form-large uk-margin-remove-top" type="text" placeholder="Click here to select a file" aria-label="Custom controls">
                         </div>
 
                         <button class="uk-button uk-button-primary uk-margin-medium uk-align-center" type="submit">Seal Secret</button>
@@ -109,12 +109,12 @@
                         </div>
                         <div class="uk-position-top-right uk-position-medium uk-margin-remove-right uk-overlay">
                             <a class="uk-link-heading" onclick="copyToClipboard();"><span uk-icon="copy"></span></a>
-                        </div>                        
-                    </div>  
+                        </div>
+                    </div>
                 </div>
-                         
+
             </div>
-            
+
 
         </div>
         <script src="static/js/extra.js"></script>
