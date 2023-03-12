@@ -31,12 +31,12 @@ spec:
             name: http
             protocol: TCP
         # Mount in a the volume below with your kubeconfigs
-        volumeMounts:
-          - name: sealed-secrets-ui-kubeconfs
-            mountPath: /kubeconfs
-            readOnly: true
+        # volumeMounts:
+        #   - name: sealed-secrets-ui-kubeconfs
+        #     mountPath: /kubeconfs
+        #     readOnly: true
       # Define the volume with your kubeconfigs
-      volumes:
-        - name: sealed-secrets-ui-kubeconfs
-          secret:
-            secretName: sealed-secrets-ui-kubeconfs
+      # volumes:
+      #   - name: sealed-secrets-ui-kubeconfs
+      #     secret:
+      #       secretName: sealed-secrets-ui-kubeconfs
