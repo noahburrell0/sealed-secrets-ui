@@ -14,7 +14,7 @@ class application:
         KUBECONF_DIR = os.getenv('KUBECONF_DIR')
         DEFAULT_SCOPE = os.getenv('DEFAULT_SCOPE')
         SCOPE_TOOLTIP = os.getenv('SCOPE_TOOLTIP', None)
-        BASE_PATH = os.getenv('BASE_PATH')
+        BASE_PATH = os.getenv('BASE_PATH', "")
 
         # Set logging
         logLevel = logging.INFO if not self.DEBUG else logging.DEBUG
