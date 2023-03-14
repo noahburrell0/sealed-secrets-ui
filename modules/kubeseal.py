@@ -58,27 +58,24 @@ class Kubeseal:
         namespace = kwargs.get('namespace', None)
         secretName = kwargs.get('secretName', None)
 
-        # Escape single quotes in value
-        valueEscaped = str.replace(value, "'", "'\"'\"'")
-
         # Set default command (for cluster-wide scope only)
-        cmd = 'echo -n \''+valueEscaped+'\' | ./bin/kubeseal --raw --scope '+scope+' --kubeconfig '+self.contexts[context]+' --context '+context
+        cmd = ['kubeseal', '--raw', '--scope', scope, '--kubeconfig', self.contexts[context], '--context', context]
 
         # Update command with namespace if scope is namespace-wide or strict
         if scope in ('namespace-wide','strict'):
             if namespace is None or namespace == "":
                 return LookupError("'namespace' key is not defined or is empty")
-            cmd = cmd+" --namespace "+namespace
+            cmd.extend(['--namespace', namespace])
 
         # Update command if scope is strict
         if scope == "strict":
             if secretName is None or secretName == "":
                 return LookupError("'secretName' key is not defined or is empty")
-            cmd = cmd+" --name "+secretName
+            cmd.extend(['--name', secretName])
 
         # Try to run Kubeseal
         try:
-            kubeseal = subprocess.run(cmd, shell=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            kubeseal = subprocess.run(cmd, shell=False, timeout=10, input=value.encode('utf-8'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             kubesealOut = kubeseal.stdout.decode('utf-8')
             kubesealErr = kubeseal.stderr.decode('utf-8')
 
@@ -104,23 +101,23 @@ class Kubeseal:
         file.save(fileLocation)
 
         # Set default command (for cluster-wide scope only)
-        cmd = './bin/kubeseal --raw --from-file '+fileLocation+' --scope '+scope+' --kubeconfig '+self.contexts[context]+' --context '+context
+        cmd = ['./bin/kubeseal', '--raw', '--from-file', fileLocation, '--scope', scope, '--kubeconfig', self.contexts[context], '--context', context]
 
         # Update command with namespace if scope is namespace-wide or strict
         if scope in ('namespace-wide','strict'):
             if namespace is None or namespace == "":
                 return LookupError("'namespace' key is not defined or is empty")
-            cmd = cmd+" --namespace "+namespace
+            cmd.extend(['--namespace', namespace])
 
         # Update command if scope is strict
         if scope == "strict":
             if secretName is None or secretName == "":
                 return LookupError("'secretName' key is not defined or is empty")
-            cmd = cmd+" --name "+secretName
+            cmd.extend(['--name', secretName])
 
         # Try to run Kubeseal
         try:
-            kubeseal = subprocess.run(cmd, shell=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            kubeseal = subprocess.run(cmd, shell=False, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             kubesealOut = kubeseal.stdout.decode('utf-8')
             kubesealErr = kubeseal.stderr.decode('utf-8')
 
