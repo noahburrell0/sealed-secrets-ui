@@ -120,6 +120,7 @@ function encrypt(){
             var response = JSON.parse(this.response);
             document.getElementById("encrypted").value = response.data;
             document.getElementById("unencrypted").value = "";
+            line_counter(); // Reset line counter
         } else if (returnCode == 500) {
             var response = JSON.parse(this.response);
             UIkit.notification({message: response.error, status: 'danger', timeout: 10000});
@@ -199,10 +200,10 @@ var resizer = function(sourceElement, targetElement, useOuterHeight) {
 
     };
 
+    //Resize when textarea is resized
     sourceElement.on("mousedown", function(e) {
         resizeInt = setInterval(resizeEvent, 100 / 15);
     });
-
     $(window).on("mouseup", function(e) {
         if (resizeInt !== null) {
             clearInterval(resizeInt);

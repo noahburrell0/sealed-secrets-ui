@@ -38,7 +38,7 @@
     resize: none;
     display: flex;
     overflow-y: hidden;
-    text-align: right;
+    text-align: center;
     background-color: #e6e6e6;
     position: absolute;
     width: 3.5rem;
