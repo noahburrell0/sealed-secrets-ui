@@ -23,7 +23,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: sealed-secrets-ui-cm
-        image: 'ghcr.io/noahburrell0/sealed-secrets-ui:v0.1.1'
+        image: 'ghcr.io/noahburrell0/sealed-secrets-ui:v0.1.2'
         imagePullPolicy: IfNotPresent
         name: sealed-secrets-ui
         ports:
