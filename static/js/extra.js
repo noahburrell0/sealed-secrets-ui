@@ -156,3 +156,62 @@ function encrypt(){
     // Prevent form from reloading page
     return false;
 }
+
+// Add line numbers to unencrypted text area
+// declare elements
+var codeEditor = document.getElementById('unencrypted');
+var lineCounter = document.getElementById('lineCounter');
+var codeEditorJQ = $("#unencrypted");
+var lineCounterJQ = $("#lineCounter");
+
+// Scroll with the unencrypted textarea
+codeEditor.addEventListener('scroll', () => {
+    lineCounter.scrollTop = codeEditor.scrollTop;
+    lineCounter.scrollLeft = codeEditor.scrollLeft;
+});
+
+// Count the lines in the unencrypted testarea
+var lineCountCache = 0;
+function line_counter() {
+      var lineCount = codeEditor.value.split('\n').length;
+      var outarr = new Array();
+      if (lineCountCache != lineCount) {
+         for (var x = 0; x < lineCount; x++) {
+            outarr[x] = (x + 1);
+         }
+         lineCounter.value = outarr.join('\n');
+      }
+      lineCountCache = lineCount;
+}
+codeEditor.addEventListener('input', () => {
+    line_counter();
+});
+
+// Dynamically resize the line counter when the main textarea changes size
+var resizer = function(sourceElement, targetElement, useOuterHeight) {
+    var resizeInt = null;
+    var resizeEvent = function() {
+        if(useOuterHeight){
+            targetElement.css("height", sourceElement.outerHeight(true));
+        } else {
+            targetElement.css("height", sourceElement.height());
+        }
+
+    };
+
+    sourceElement.on("mousedown", function(e) {
+        resizeInt = setInterval(resizeEvent, 100 / 15);
+    });
+
+    $(window).on("mouseup", function(e) {
+        if (resizeInt !== null) {
+            clearInterval(resizeInt);
+        }
+        resizeEvent();
+    });
+}
+
+// Run resizer for the line counter
+lineCounterJQ.css("height", codeEditorJQ.outerHeight(true));
+resizer(codeEditorJQ, lineCounterJQ, true);
+
