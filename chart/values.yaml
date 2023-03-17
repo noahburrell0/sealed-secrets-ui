@@ -93,3 +93,5 @@ kubeconfig:
 
 # List of additional raw Kubernetes manifests you may wish to deploy alongside this application
 extraDeploy: []
+
+test: {}
