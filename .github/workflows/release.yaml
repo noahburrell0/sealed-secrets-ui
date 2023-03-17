@@ -36,7 +36,11 @@ jobs:
       - name: Set Variables
         id: vars
         run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          
       # Get current chart version and increment
       - name: Get Chart Version
         uses: mikefarah/yq@master
@@ -65,11 +69,6 @@ jobs:
           message: 'Update Chart appVersion to ${{ steps.vars.outputs.tag }} and version to ${{ steps.new_chart_version.outputs.next-version }}'
 
       # Create and publish the chart
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.5.0
         with:
