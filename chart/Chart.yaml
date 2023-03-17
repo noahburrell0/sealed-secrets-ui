@@ -2,5 +2,5 @@ apiVersion: v2
 name: sealed-secrets-ui
 description: A Helm chart for a Sealed Secrets web interface
 type: application
-version: v0.1.4
-appVersion: 0.1.0
+version: 0.1.5
+appVersion: v0.1.3
