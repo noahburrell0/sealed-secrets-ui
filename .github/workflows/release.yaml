@@ -52,25 +52,17 @@ jobs:
           version-fragment: 'bug'
 
       # Update Chart.yaml with new version and appVersion
-      - name: Update Chart.yaml appVersion
+      - name: Update Chart.yaml version and appVersion
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'chart/Chart.yaml'
           propertyPath: 'appVersion'
+          changes: '{"appVersion": "${{ steps.vars.outputs.tag }}", "appVersion": "${{ steps.new_chart_version.outputs.next-version }}"}'
           value: ${{ steps.vars.outputs.tag }}
           targetBranch: main
           commitChange: true
-          message: 'Update Chart appVersion to ${{ steps.vars.outputs.tag }}'
-
-      - name: Update Chart.yaml version
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          valueFile: 'chart/Chart.yaml'
-          propertyPath: 'version'
-          targetBranch: main
-          value: ${{ steps.new_chart_version.outputs.next-version }}
-          commitChange: true
-          message: 'Update Chart appVersion to ${{ steps.new_chart_version.outputs.next-version }}'
+          createPR: false
+          message: 'Update Chart appVersion to ${{ steps.vars.outputs.tag }} and version to ${{ steps.new_chart_version.outputs.next-version }}'
 
       # Create and publish the chart
       - name: Configure Git
