@@ -3,4 +3,4 @@ name: sealed-secrets-ui
 description: A Helm chart for a Sealed Secrets web interface
 type: application
 version: 0.0.0
-appVersion: v0.1.2
+appVersion: v0.1.3
