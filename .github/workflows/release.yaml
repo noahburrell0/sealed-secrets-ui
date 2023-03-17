@@ -2,31 +2,85 @@ name: Create Release
 on:
   release:
     types: [released]
-
+  workflow_dispatch:
+    inputs:
+      tags:
 
 jobs:
   build-publish-image:
     name: Build and Publish Image
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Set Variables
         id: vars
         run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-
       - name: Login to registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Docker Build and Push
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
           tags: ghcr.io/noahburrell0/sealed-secrets-ui:latest,ghcr.io/noahburrell0/sealed-secrets-ui:${{ steps.vars.outputs.tag }}
+
+  publish-helm-chart:
+    name: Publish Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set Variables
+        id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+      # Get current chart version and increment
+      - name: Get Chart Version
+        uses: mikefarah/yq@master
+        id: get_chart_version
+        with:
+          cmd: yq '.version' chart/Chart.yaml
+
+      - name: Increment Chart Version
+        uses: christian-draeger/increment-semantic-version@1.1.0
+        id: new_chart_version
+        with:
+          current-version: ${{ steps.get_chart_version.outputs.result }}
+          version-fragment: 'bug'
+
+      # Update Chart.yaml with new version and appVersion
+      - name: Update Chart.yaml appVersion
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: 'chart/Chart.yaml'
+          propertyPath: 'appVersion'
+          value: ${{ steps.vars.outputs.tag }}
+          commitChange: false
+
+      - name: Update Chart.yaml version
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: 'chart/Chart.yaml'
+          propertyPath: 'version'
+          value: ${{ steps.new_chart_version.outputs.next-version }}
+          commitChange: false
+
+      # Create and publish the chart
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
+        with:
+          charts_dir: chart
+          charts_repo_url: https://noahburrell0.github.io/sealed-secrets-ui/chart/packages/
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_PACKAGE_PATH: chart/packages/

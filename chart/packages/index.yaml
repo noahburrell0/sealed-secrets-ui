@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  sealed-secrets-ui:
+  - apiVersion: v2
+    appVersion: v0.1.2
+    created: "2023-03-17T11:51:13.635206826-04:00"
+    description: A Helm chart for a Sealed Secrets web interface
+    digest: 1fe49366253ebbf8076dd3b7ba8d87a0c525dcc327c6d5405223df6305fcc2b3
+    name: sealed-secrets-ui
+    type: application
+    urls:
+    - https://noahburrell0.github.io/sealed-secrets-ui/chart/packages/sealed-secrets-ui-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-03-17T11:51:13.633204466-04:00"
