@@ -37,7 +37,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ .host | quote }}
+    - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
           - pathType: Prefix
