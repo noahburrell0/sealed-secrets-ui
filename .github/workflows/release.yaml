@@ -31,3 +31,9 @@ jobs:
   publish-helm-chart:
     name: Publish Helm Chart
     runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set Variables
+        id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
