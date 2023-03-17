@@ -70,8 +70,7 @@ jobs:
       # Create and publish the chart
       - name: Release Chart
         uses: helm/chart-releaser-action@v1.5.0
+        with:
+          config: charts/config.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_SKIP_EXISTING: "false"
-          CR_MAKE_RELEASE_LATEST: "false"
-          CR_RELEASE_NAME_TEMPLATE: "chart-{{ .Version }}"

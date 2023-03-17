@@ -1,0 +1,3 @@
+skip-existing: "false"
+make-release-latest: "false"
+release-name-template: "chart-{{ .Version }}"
