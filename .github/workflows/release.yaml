@@ -58,15 +58,19 @@ jobs:
           valueFile: 'chart/Chart.yaml'
           propertyPath: 'appVersion'
           value: ${{ steps.vars.outputs.tag }}
-          commitChange: false
+          targetBranch: main
+          commitChange: true
+          message: 'Update Chart appVersion to ${{ steps.vars.outputs.tag }}'
 
       - name: Update Chart.yaml version
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'chart/Chart.yaml'
           propertyPath: 'version'
+          targetBranch: main
           value: ${{ steps.new_chart_version.outputs.next-version }}
-          commitChange: false
+          commitChange: true
+          message: 'Update Chart appVersion to ${{ steps.new_chart_version.outputs.next-version }}'
 
       # Create and publish the chart
       - name: Configure Git
