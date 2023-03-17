@@ -45,7 +45,7 @@ spec:
               {{- if not .Values.configs.basePath }}
               path: /
               {{- else }}
-              path: /{{ .Values.configs.basePath }}/
+              path: {{ .Values.configs.basePath }}/
               {{- end }}
               port: http
           readinessProbe:
@@ -53,7 +53,7 @@ spec:
               {{- if not .Values.configs.basePath }}
               path: /
               {{- else }}
-              path: /{{ .Values.configs.basePath }}/
+              path: {{ .Values.configs.basePath }}/
               {{- end }}
               port: http
           resources:

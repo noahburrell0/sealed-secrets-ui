@@ -74,7 +74,7 @@ affinity: {}
 
 configs: {}
   # kubeconfigDir: /kubeconfigs # No trailing "/"
-  # basePath: "test" # No leading or trailing "/"
+  # basePath: "/test" # No trailing "/"
   # defaultScope: "strict" # Valid options: "strict", "namespace-wide", "cluster-wide"
   # scopeToolTip: ""
   # debug: "False"
