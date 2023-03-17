@@ -46,7 +46,7 @@ jobs:
         uses: mikefarah/yq@master
         id: get_chart_version
         with:
-          cmd: yq '.version' chart/Chart.yaml
+          cmd: yq '.version' charts/sealed-secrets-ui/Chart.yaml
 
       - name: Increment Chart Version
         uses: christian-draeger/increment-semantic-version@1.1.0
@@ -59,7 +59,7 @@ jobs:
       - name: Update Chart.yaml version and appVersion
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: 'chart/Chart.yaml'
+          valueFile: 'charts/sealed-secrets-ui/Chart.yaml'
           changes: '{"appVersion": "${{ steps.vars.outputs.tag }}", "version": "${{ steps.new_chart_version.outputs.next-version }}"}'
           branch: main
           masterBranchName: main
