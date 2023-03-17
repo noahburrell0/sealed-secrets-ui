@@ -60,7 +60,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: {{ include "chart.fullname" . }}-kubeconfigs
-              mountPath: {{ .Values.configs.kubeconfigDir | default "kubeconfigDir"}}
+              mountPath: {{ .Values.configs.kubeconfigDir | default "/kubeconfigs"}}
               readOnly: true
       volumes:
         - name: {{ include "chart.fullname" . }}-kubeconfigs
