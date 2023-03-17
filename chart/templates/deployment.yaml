@@ -29,24 +29,35 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "chart.fullname" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 5000
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.configs.basePath | default "/" }}
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.configs.basePath | default "/" }}
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: {{ include "chart.fullname" . }}-kubeconfigs
+              mountPath: {{ .Values.configs.kubeconfigDir }}
+              readOnly: true
+      volumes:
+        - name: {{ include "chart.fullname" . }}-kubeconfigs
+          secret:
+            secretName: {{ include "chart.fullname" . }}-kubeconfigs
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

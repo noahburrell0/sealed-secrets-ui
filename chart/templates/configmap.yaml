@@ -1,0 +1,18 @@
+apiVersion: v1
+data:
+  KUBECONF_DIR: {{ .Values.configs.kubeconfigDir | quote }}
+  {{- if .Values.configs.basePath }}
+  BASE_PATH: {{ .Values.configs.basePath | quote }}
+  {{- end }}
+  {{- if .Values.configs.defaultScope }}
+  DEFAULT_SCOPE: {{ .Values.configs.defaultScope | quote }}
+  {{- end }}
+  {{- if .Values.configs.scopeToolTip }}
+  SCOPE_TOOLTIP: {{ .Values.configs.scopeToolTip | quote }}
+  {{- end }}
+  {{- if .Values.configs.debug }}
+  DEBUG: {{ .Values.configs.debug | quote }}
+  {{- end }}
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}
