@@ -78,7 +78,7 @@ jobs:
         uses: helm/chart-releaser-action@v1.5.0
         with:
           charts_dir: chart
-          charts_repo_url: https://noahburrell0.github.io/sealed-secrets-ui/chart/packages/
+          # charts_repo_url: https://noahburrell0.github.io/sealed-secrets-ui/chart/packages/
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_PACKAGE_PATH: chart/packages/
