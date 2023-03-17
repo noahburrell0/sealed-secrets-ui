@@ -40,8 +40,12 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          - path: {{ .Values.configs.basePath | default "/" }}
-            pathType: Prefix
+          - pathType: Prefix
+            {{- if not .Values.configs.basePath }}
+            path: /
+            {{- else }}
+            path: /{{ .Values.configs.basePath}}/
+            {{- end }}
             backend:
               service:
                 name: {{ $fullName }}
