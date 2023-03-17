@@ -44,7 +44,7 @@ spec:
             {{- if not .Values.configs.basePath }}
             path: /
             {{- else }}
-            path: /{{ .Values.configs.basePath}}/
+            path: /{{ .Values.configs.basePath }}/
             {{- end }}
             backend:
               service:
