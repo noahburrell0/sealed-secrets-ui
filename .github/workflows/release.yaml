@@ -74,4 +74,4 @@ jobs:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_SKIP_EXISTING: "false"
           CR_MAKE_RELEASE_LATEST: "false"
-          CR_RELEASE_NAME_TEMPLATE: "Chart Release {{ .Version }}"
+          CR_RELEASE_NAME_TEMPLATE: "chart-{{ .Version }}"
