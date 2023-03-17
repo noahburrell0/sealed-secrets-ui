@@ -3,8 +3,6 @@ on:
   release:
     types: [released]
   workflow_dispatch:
-    inputs:
-      tags:
 
 jobs:
   build-publish-image:
