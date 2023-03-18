@@ -5,21 +5,23 @@
 
 ## Introduction
 
-This application is designed to provide a web-based GUI for encrypting Kubernetes secrets for use with Bitnami Sealed Secrets using the Kubeseal utility.
+This application is designed to provide a web-based GUI for encrypting values for use with Bitnami Sealed Secrets.
 
 This application currently supports:
 - All Kubeseal scopes (`strict`, `namespace-wide`, and `cluster-wide`)
 - Context selection
     - Multiple Kubeconfig files
     - Automatic context discovery from Kubeconfig files
-- Encryption of raw text (Ie. Kubeseal's `--raw` parameter)
-- Whole file encryption (Ie. Kubeseal's `--raw --from-file` parameters) with in-browser file uploads
+- Encryption of raw text (kubeseal `--raw` equivilent)
+- Whole file encryption (kubeseal `--raw --from-file` equivilent) with in-browser file uploads
+- Kubeconfig authentication against GKE (gke-gcloud-auth-plugin)
 - Direct API calls to seal secrets
 
 This application currently **does not** support:
 - Converting Kubernetes Secret manifests to SealedSecret manifests (yet)
 - Any sort of authentication to the API or web UI
 - Setting the namespace that the Sealed Secrets operator is installed to (must be `kube-system`)
+- Authentication against any cloud provider (excluding Google) that require an authentication plugin
 
 ## Install With Helm
 
@@ -36,7 +38,7 @@ helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
 ```
 
 ### Sealed Secrets UI Parameters
-> `kubeconfig` parameters are required.
+> `kubeconfig` configuration parameters are required.
 
 |Name|Description|Value|
 |-|-|-|
@@ -90,30 +92,29 @@ helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
 
 ## Running Locally
 
-> Developed with Python 3.10, not guarenteed to work with other versions.
+> Developed and tested with Python 3.10, not guarenteed to work with other versions.
 
-1. Fork and/or clone this repository.
-2. Create a Python virtual environment.
+1. Create a Python virtual environment.
 ```
 python -m venv ./venv
 ```
-3. Activate the virtual environment.
+2. Activate the virtual environment.
 ```
 source venv/bin/activate
 ```
-4. Setup the Kubeconfig directory.
+3. Setup the Kubeconfig directory.
 ```
 export KUBECONF_DIR="/path/to/my/kubeconfigs"
 ```
-5. Install requirements.
+4. Install requirements.
 ```
 pip install -r requirements.txt
 ```
-6. Run in local development mode.
+5. Run in local development mode.
 ```
 python main.py
 ```
-7. UI should be reachable at `http://localhost:5000/` by default unless you have set the `BASE_PATH` environment variable.
+6. UI should be reachable at `http://localhost:5000/` by default.
 
 ## API Usage
 
