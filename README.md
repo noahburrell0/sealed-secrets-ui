@@ -34,7 +34,7 @@ helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
 -n sealed-secrets-ui \
 --create-namespace \
 --set kubeconfig.sealedSecret=false \
---set kubeconfig.files.kubeconfig='<INSERT KUBECONFIG FILE>'
+--set kubeconfig.files.kubeconfig='<INSERT KUBECONFIG FILE CONTENTS>'
 ```
 
 ### Sealed Secrets UI Parameters
