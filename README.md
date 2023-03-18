@@ -43,7 +43,7 @@ helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
 |Name|Description|Value|
 |-|-|-|
 |`configs.basepath`|The base path of the application if operating on a path other than the root path|`""`|
-|`configs.debug`|Enable debug logging in the container (WARNING: will expose inputted secrets in the web interface)|`False`|
+|`configs.debug`|Enable debug logging in the container (WARNING: will expose secrets inputted in the web interface)|`False`|
 |`configs.defaultScope`|The default scope to select in the web interface (valid options: `strict`, `namespace-wide`, `cluster-wide`)|`strict`|
 |`configs.kubeconfigDir`|The directory in the container to mount the kubeconfig files to|`/kubeconfigs`|
 |`configs.scopeToolTop`|A custom tooltip that appears when hovering the scope selector in the web interface|`""`|
