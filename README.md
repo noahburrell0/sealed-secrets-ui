@@ -5,80 +5,116 @@
 
 ## Introduction
 
-This application is designed to provide a web-based GUI for encrypting Kubernetes secrets for use with Bitnami Sealed Secrets using the Kubeseal utility.
+This application is designed to provide a web-based GUI for encrypting values for use with Bitnami Sealed Secrets.
 
 This application currently supports:
 - All Kubeseal scopes (`strict`, `namespace-wide`, and `cluster-wide`)
 - Context selection
     - Multiple Kubeconfig files
     - Automatic context discovery from Kubeconfig files
-- Encryption of raw text (Ie. Kubeseal's `--raw` parameter)
-- Whole file encryption (Ie. Kubeseal's `--raw --from-file` parameters) with in-browser file uploads
+- Encryption of raw text (kubeseal `--raw` equivilent)
+- Whole file encryption (kubeseal `--raw --from-file` equivilent) with in-browser file uploads
+- Kubeconfig authentication against GKE (gke-gcloud-auth-plugin)
 - Direct API calls to seal secrets
 
 This application currently **does not** support:
 - Converting Kubernetes Secret manifests to SealedSecret manifests (yet)
 - Any sort of authentication to the API or web UI
 - Setting the namespace that the Sealed Secrets operator is installed to (must be `kube-system`)
+- Authentication against any cloud provider (excluding Google) that require an authentication plugin
 
-## Setup
-
-### Run in Kubernetes
-This application is designed to run in Kubernetes! A set of base Kubernetes manifests are available in the [manifests](manifests/) directory. A mount method for your Kubeconfig file/s is not included in these manifests. Please see the note below and consult with the Kubernetes docs to implement your chosen method.
-
-Docker images are available in GHCR [here](https://github.com/noahburrell0/sealed-secrets-ui/pkgs/container/sealed-secrets-ui).
-
-Just mount in your Kubeconfig and update the `configmap.yaml` with your settings. Optionally, you may wish to set up an ingress for ease of access (not included in manifests).
-
-### Kubeconfig/s
-Kubeconfig files can be mounted into the container using either a PersistenVolume or by mounting a secret. The directory that the files are mount into should be specified by the `KUBECONF_DIR` environment variable. Please consult with the Kubernetes documentation if you are unsure how to do this.
-
-### Environment Variables
-Set your environment variable in the [configmap](manifests/configmap.yaml).
-
-|Variable|Type|Required|Default|Notes|
-|-|-|:-:|-|-|
-|KUBECONF_DIR|String|✔|None|Absolute path to directory containing kubeconfig file/s, do not include a trailing `/` .
-|BASE_PATH|String||`""`|Defines the base path the web UI and API operate on, do not include a trailing `/` .
-|DEFAULT_SCOPE|String||None|Defines the scope selected by default in the web UI. Valid options: `strict`, `namespace-wide`, or `cluster-wide`.
-|SCOPE_TOOLTIP|String||None|Enables an in-browser tooltip when hovering the scope selection.
-|DEBUG|Boolean||`False`|May output sensitive information in logs if enabled.
-
-### Accessing the Web UI
-By default, the application listens on `0.0.0.0:5000` and the kubernetes service is configured on the same port. To access the API and web UI (assuming no ingress is configured and the service has not been reconfigured as a loadbalancer), use `kubectl` to create a proxy to the application.
+## Install With Helm
 
 ```
-kubectl port-forward service/sealed-secrets-ui-svc 5000:5000 -n sealed-secrets-ui
+helm repo add sealed-secrets-ui https://noahburrell0.github.io/sealed-secrets-ui/
+
+helm repo update
+
+helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
+-n sealed-secrets-ui \
+--create-namespace \
+--set kubeconfig.sealedSecret=false \
+--set kubeconfig.files.kubeconfig='<INSERT KUBECONFIG FILE>'
 ```
 
-Assuming the `BASE_PATH` env has not been modified, the web UI should now by accessible at `http://localhost:5000/`
+### Sealed Secrets UI Parameters
+> `kubeconfig` configuration parameters are required.
+
+|Name|Description|Value|
+|-|-|-|
+|`configs.basepath`|The base path of the application if operating on a path other than the root path|`""`|
+|`configs.debug`|Enable debug logging in the container (WARNING: will expose inputted secrets in the web interface)|`False`|
+|`configs.defaultScope`|The default scope to select in the web interface (valid options: `strict`, `namespace-wide`, `cluster-wide`)|`strict`|
+|`configs.kubeconfigDir`|The directory in the container to mount the kubeconfig files to|`/kubeconfigs`|
+|`configs.scopeToolTop`|A custom tooltip that appears when hovering the scope selector in the web interface|`""`|
+|`kubeconfig.files`|Kubeconfig files either encrypted or plaintext (depending on `kubeconfig.sealedSecret`), key is filename and value is file contents|`{}`|
+|`kubeconfig.sealedSecret`|Indicates if `kubeconfig.files` are sealed secrets, if `false` then `kubeconfig.files` will be deployed as a secret|`true`|
+|`kubeconfig.sealedSecretConfig.scope`|If `kubeconfig.sealedSecret` is `true` specifies scope configuration (valid options: `strict`, `namespace-wide`, `cluster-wide`)|`""`|
+
+### Common Parameters
+|Name|Description|Value|
+|-|-|-|
+|`replicaCount`|The number of replicas which should be deployed|`1`|
+|`image.repository`|Container image registry|`ghcr.io/noahburrell0/sealed-secrets-ui`|
+|`image.pullPolicy`|Image pull policy|`IfNotPresent`|
+|`image.tag`|Sealed Secrets UI image tag (immutable tags are recommended)|`""`|
+|`imagePullSecrets`|Sealed Secrets UI image pull secrets|`[]`|
+|`nameOverride`|String to partially override common.names.fullname|`""`|
+|`fullnameOverride`|String to fully override common.names.fullname|`""`|
+|`serviceAccount.create`|Enable the creation of a ServiceAccount for Sealed Secrets UI pods|`true`|
+|`serviceAccount.name`|The name of the ServiceAccount to use|`""`|
+|`serviceAccount.annotations`|Annotations for Sealed Secrets UI Service Account|`{}`|
+|`podAnnotations`|Additional pod annotations|`{}`|
+|`podSecurityContext`|Set Sealed Secrets UI pod's Security Context|`{}`|
+|`securityContext.runAsUser`|Set Sealed Secrets UI container's Security Context runAsUser|`1000`|
+|`securityContext.runAsGroup`|Set Sealed Secrets UI container's Security Context runAsGroup|`1000`|
+|`service.type`|Sealed Secrets UI service type|`ClusterIP`|
+|`service.port`|Sealed Secrets UI service Port|`5000`|
+|`ingress.enabled`|Enable ingress resource for Sealed Secrets UI|`true`|
+|`ingress.className`|Set the ingress class to user|`""`|
+|`ingress.annotations`|Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.|`{}`|
+|`ingress.host`|Hostname used for the ingress resource|`example.local`|
+|`ingress.tls`|TLS configuration for the ingress resource|`[]`|
+|`resources.limits.cpu`|The requested cpu limit for the container|`100m`|
+|`resources.limits.memory`|The requested memory limit for the container|`128Mi`|
+|`resources.requests.cpu`|The requested cpu resources for the container|`100m`|
+|`resources.requests.memory`|The requested memory resources for the container|`128Mi`|
+|`autoscaling.enabled`|Enable Horizontal Pod Autoscaling|`false`|
+|`autoscaling.minReplicas`|Minimum number of replicas|`1`|
+|`autoscaling.maxReplicas`|Maximum number of replicas|`100`|
+|`autoscaling.targetCPUUtilizationPercentage`|Target CPU utilization percentage|`50`|
+|`autoscaling.targetMemoryUtilizationPercentage`|Target Memory utilization percentage|`80`|
+|`nodeSelector`|Node labels for pod assignment|`{}`|
+|`tolerations`|Tolerations for pod assignment|`[]`|
+|`affinity`|Affinity for pod assignment|`{}`|
+|`extraDeploy`|Array of extra objects to deploy with the release|`[]`|
+
 
 ## Running Locally
 
-> Developed with Python 3.10, not guarenteed to work with other versions.
+> Developed and tested with Python 3.10, not guarenteed to work with other versions.
 
-1. Fork and/or clone this repository.
-2. Create a Python virtual environment.
+1. Create a Python virtual environment.
 ```
 python -m venv ./venv
 ```
-3. Activate the virtual environment.
+2. Activate the virtual environment.
 ```
 source venv/bin/activate
 ```
-4. Setup the Kubeconfig directory.
+3. Setup the Kubeconfig directory.
 ```
 export KUBECONF_DIR="/path/to/my/kubeconfigs"
 ```
-5. Install requirements.
+4. Install requirements.
 ```
 pip install -r requirements.txt
 ```
-6. Run in local development mode.
+5. Run in local development mode.
 ```
 python main.py
 ```
-7. UI should be reachable at `http://localhost:5000/` by default unless you have set the `BASE_PATH` environment variable.
+6. UI should be reachable at `http://localhost:5000/` by default.
 
 ## API Usage
 
