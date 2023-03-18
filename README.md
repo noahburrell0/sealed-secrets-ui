@@ -25,6 +25,7 @@ This application currently **does not** support:
 
 ## Install With Helm
 
+### Quickstart
 ```
 helm repo add sealed-secrets-ui https://noahburrell0.github.io/sealed-secrets-ui/
 
