@@ -1,0 +1,37 @@
+{{- if and .Values.authFiles.enabled .Values.authFiles.sealedSecret }}
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    {{- if eq .Values.authFiles.sealedSecretConfig.scope "cluster-wide" }}
+    sealedsecrets.bitnami.com/cluster-wide: 'true'
+    {{- else if eq .Values.authFiles.sealedSecretConfig.scope "namespace-wide" }}
+    sealedsecrets.bitnami.com/namespace-wide: 'true'
+    {{- else }}
+    sealedsecrets.bitnami.com/strict: 'true'
+    {{- end }}
+  creationTimestamp: null
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  name: {{ include "chart.fullname" . }}-authfiles
+spec:
+  encryptedData:
+    {{- with .Values.authFiles.files }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  template:
+    data: null
+    metadata:
+      annotations:
+        {{- if eq .Values.authFiles.sealedSecretConfig.scope "cluster-wide" }}
+        sealedsecrets.bitnami.com/cluster-wide: 'true'
+        {{- else if eq .Values.authFiles.sealedSecretConfig.scope "namespace-wide" }}
+        sealedsecrets.bitnami.com/namespace-wide: 'true'
+        {{- else }}
+        sealedsecrets.bitnami.com/strict: 'true'
+        {{- end }}
+      creationTimestamp: null
+      labels:
+        {{- include "chart.labels" . | nindent 8 }}
+      name: {{ include "chart.fullname" . }}-authfiles
+{{- end }}

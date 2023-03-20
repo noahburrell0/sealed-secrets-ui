@@ -20,6 +20,11 @@ helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
 
 |Name|Description|Value|
 |-|-|-|
+|`authFiles.enabled`|Enables adding authentication files such as a GCP Service Account file.|`false`|
+|`authFiles.files`|Auth files either encrypted or plaintext (depending on `authFiles.sealedSecret`), key is filename and value is file contents|`{}`|
+|`authFiles.sealedSecret`|Indicates if `authFiles.files` are sealed secrets, if `false` then `authFiles.files` will be deployed as a secret|`true`|
+|`authFiles.sealedSecretConfig.scope`|If `authFiles.sealedSecret` is `true` specifies scope configuration (valid options: `strict`, `namespace-wide`, `cluster-wide`)|`""`|
+|`configs.authFilesDir`|The directory in the container to mount any auth files to|`/auth`|
 |`configs.basepath`|The base path of the application if operating on a path other than the root path|`""`|
 |`configs.debug`|Enable debug logging in the container (WARNING: will expose secrets inputted in the web interface)|`False`|
 |`configs.defaultScope`|The default scope to select in the web interface (valid options: `strict`, `namespace-wide`, `cluster-wide`)|`strict`|
@@ -66,3 +71,4 @@ helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
 |`tolerations`|Tolerations for pod assignment|`[]`|
 |`affinity`|Affinity for pod assignment|`{}`|
 |`extraDeploy`|Array of extra objects to deploy with the release|`[]`|
+|`extraEnvs`|Map of extra environment variables to inject into the configmap|`{}`|
