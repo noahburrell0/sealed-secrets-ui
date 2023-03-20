@@ -71,3 +71,4 @@ helm install sealed-secrets-ui sealed-secrets-ui/sealed-secrets-ui \
 |`tolerations`|Tolerations for pod assignment|`[]`|
 |`affinity`|Affinity for pod assignment|`{}`|
 |`extraDeploy`|Array of extra objects to deploy with the release|`[]`|
+|`extraEnvs`|Map of extra environment variables to inject into the configmap|`{}`|

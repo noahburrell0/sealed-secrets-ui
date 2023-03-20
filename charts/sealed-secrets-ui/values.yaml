@@ -108,3 +108,6 @@ authFiles:
 
 # List of additional raw Kubernetes manifests you may wish to deploy alongside this application
 extraDeploy: []
+
+# List of additional environment variables to inject into the configmap
+extraEnvs: {}
