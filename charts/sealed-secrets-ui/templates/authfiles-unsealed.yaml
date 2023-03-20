@@ -1,0 +1,11 @@
+{{- if and (eq .Values.authFiles.enabled true) (eq .Values.authFiles.sealedSecret false) }}
+apiVersion: v1
+data:
+  {{- range $k, $v := .Values.authFiles.files }}
+  {{ $k }}: {{ $v | b64enc}}
+  {{- end }}
+kind: Secret
+metadata:
+  name: {{ include "chart.fullname" . }}-authFiles
+type: Opaque
+{{- end }}
