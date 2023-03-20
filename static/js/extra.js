@@ -121,6 +121,9 @@ function encrypt(){
             document.getElementById("encrypted").value = response.data;
             document.getElementById("unencrypted").value = "";
             line_counter(); // Reset line counter
+
+            // Set filename based on mode when we get a 200 back
+            setFilename(document.getElementById("mode").value, uploadedFile);
         } else if (returnCode == 500) {
             var response = JSON.parse(this.response);
             UIkit.notification({message: response.error, status: 'danger', timeout: 10000});
@@ -216,3 +219,49 @@ var resizer = function(sourceElement, targetElement, useOuterHeight) {
 lineCounterJQ.css("height", codeEditorJQ.outerHeight(true));
 resizer(codeEditorJQ, lineCounterJQ, true);
 
+// Download Encrypted textarea contents
+function downloadFile(filename, content) {
+    // It works on all HTML5 Ready browsers as it uses the download attribute of the <a> element:
+    const element = document.createElement('a');
+
+    //A blob is a data type that can store binary data
+    // “type” is a MIME type
+    // It can have a different value, based on a file you want to save
+    const blob = new Blob([content], { type: 'plain/text' });
+    //createObjectURL() static method creates a DOMString containing a URL representing the object given in the parameter.
+    const fileUrl = URL.createObjectURL(blob);
+
+    //setAttribute() Sets the value of an attribute on the specified element.
+    element.setAttribute('href', fileUrl); //file location
+    element.setAttribute('download', filename); // file name
+    element.style.display = 'none';
+
+    //use appendChild() method to move an element from one element to another
+    document.body.appendChild(element);
+    element.click();
+
+    //The removeChild() method of the Node interface removes a child node from the DOM and returns the removed node
+    document.body.removeChild(element);
+};
+
+// Add event listener for download button
+window.onload = () => {
+document.getElementById('download').
+addEventListener('click', e => {
+    const filename = document.getElementById('filename').value;
+    const content = document.getElementById('encrypted').value;
+
+    if (filename && content) {
+    downloadFile(filename, content);
+    }
+});
+};
+
+// Set file name by mode
+function setFilename(mode, file=""){
+    if(mode == "raw"){
+        document.getElementById('filename').value = "sealed-secret.txt"
+    } else if(mode == "file"){
+        document.getElementById('filename').value = file.name+"-sealed.txt"
+    }
+}

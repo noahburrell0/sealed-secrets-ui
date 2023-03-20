@@ -104,13 +104,16 @@
                 <hr class="uk-margin-remove"/>
 
                 <div class="uk-panel uk-margin-medium-top">
+                    <input type="text" id="filename" readonly hidden>
                     <div class="uk-text-lead uk-text-center">Encrypted Output</div>
                     <div>
                         <div>
                             <textarea  class="uk-textarea uk-resize-vertical" rows="12" id="encrypted" readonly disabled></textarea>
                         </div>
-                        <div class="uk-position-top-right uk-position-medium uk-margin-remove-right uk-overlay">
-                            <a class="uk-link-heading" onclick="copyToClipboard();"><span uk-icon="copy"></span></a>
+                        <div class="uk-position-top-right uk-position-medium uk-padding-remove uk-margin-small-right uk-margin-medium-top  uk-overlay">
+                            <div class="uk-overlay-default uk-padding-small">
+                                <a class="uk-link-heading" id="download" title="Download"><span uk-icon="download"></span></a><a class="uk-link-heading uk-margin-small-left" onclick="copyToClipboard();" title="Copy"><span uk-icon="copy"></span></a>
+                            <div>
                         </div>
                     </div>
                 </div>
