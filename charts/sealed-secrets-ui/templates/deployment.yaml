@@ -63,7 +63,7 @@ spec:
               mountPath: {{ .Values.configs.kubeconfigDir | default "/kubeconfigs"}}
               readOnly: true
             {{- if .Values.authFiles.enabled }}
-            - name: {{ include "chart.fullname" . }}-authFiles
+            - name: {{ include "chart.fullname" . }}-authfiles
               mountPath: {{ .Values.configs.authFilesDir | default "/auth"}}
               readOnly: true
             {{- end }}
@@ -74,7 +74,7 @@ spec:
         {{- if .Values.authFiles.enabled }}
         - name: {{ include "chart.fullname" . }}-authfiles
           secret:
-            secretName: {{ include "chart.fullname" . }}-authFiles
+            secretName: {{ include "chart.fullname" . }}-authfiles
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
