@@ -72,7 +72,7 @@ spec:
           secret:
             secretName: {{ include "chart.fullname" . }}-kubeconfigs
         {{- if .Values.authFiles.enabled }}
-        - name: {{ include "chart.fullname" . }}-authFiles
+        - name: {{ include "chart.fullname" . }}-authfiles
           secret:
             secretName: {{ include "chart.fullname" . }}-authFiles
         {{- end }}

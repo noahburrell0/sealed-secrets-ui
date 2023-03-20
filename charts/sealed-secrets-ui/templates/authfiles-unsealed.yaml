@@ -6,6 +6,6 @@ data:
   {{- end }}
 kind: Secret
 metadata:
-  name: {{ include "chart.fullname" . }}-authFiles
+  name: {{ include "chart.fullname" . }}-authfiles
 type: Opaque
 {{- end }}

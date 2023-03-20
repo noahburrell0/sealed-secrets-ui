@@ -13,7 +13,7 @@ metadata:
   creationTimestamp: null
   labels:
     {{- include "chart.labels" . | nindent 4 }}
-  name: {{ include "chart.fullname" . }}-authFiles
+  name: {{ include "chart.fullname" . }}-authfiles
 spec:
   encryptedData:
     {{- with .Values.authFiles.files }}
@@ -33,5 +33,5 @@ spec:
       creationTimestamp: null
       labels:
         {{- include "chart.labels" . | nindent 8 }}
-      name: {{ include "chart.fullname" . }}-authFiles
+      name: {{ include "chart.fullname" . }}-authfiles
 {{- end }}
