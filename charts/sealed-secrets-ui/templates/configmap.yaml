@@ -19,3 +19,5 @@ data:
 kind: ConfigMap
 metadata:
   name: {{ include "chart.fullname" . }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
