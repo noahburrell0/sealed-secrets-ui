@@ -1,6 +1,11 @@
 FROM python:3.10-slim
 WORKDIR /app
 
+# Install process tools for startup probes, and apply latest minor patchsets from base tag
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y && apt-get install --no-install-recommends -y procps curl && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+# RUN dpkg -r --force-all apt apt-get && dpkg -r --force-all debconf dpkg
+
 # Copy required files
 COPY requirements.txt ./
 COPY *.py ./
@@ -26,7 +31,7 @@ RUN rm -rf /tmp/*
 RUN useradd -c 'Sealed Secrets UI user' -m -d /app -s /bin/bash sealedsecrets
 RUN chown -R sealedsecrets.sealedsecrets /app
 USER sealedsecrets
-ENV HOME /app
+ENV HOME=/app
 
 # Setup Path
 RUN mkdir -p .local/bin
