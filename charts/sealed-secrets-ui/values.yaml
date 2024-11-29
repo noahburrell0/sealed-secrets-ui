@@ -23,6 +23,9 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# Deployment
+annotations: {}
+# Pod
 podAnnotations: {}
 
 podSecurityContext: {}
@@ -59,12 +62,38 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+livenessProbe:
+  initialDelaySeconds: 10
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  initialDelaySeconds: 12
+  httpGet:
+    path: /
+    port: http
+startupProbe:
+  exec:
+    command:
+      - pgrep
+      - gunicorn
+
 autoscaling:
   enabled: false
+  annotations: {}
   # minReplicas: 1
   # maxReplicas: 100
   # targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+  
+pdb:
+  # enabled: true set minAvailable: 1 by default
+  enabled: false
+  annotations: {}
+  # minAvailable overrides maxUnavailable if both set
+  # minAvailable: 1
+  # https://raw.githubusercontent.com/kubernetes/website/main/content/en/examples/policy/zookeeper-pod-disruption-budget-maxunavailable.yaml
+  # maxUnavailable: 2
 
 nodeSelector: {}
 
